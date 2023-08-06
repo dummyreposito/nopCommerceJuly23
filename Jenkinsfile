@@ -18,7 +18,7 @@ pipeline {
         }
         stage('deploy') {
             steps {
-                sh 'cd deploy && terraform init && terraform apply -auto-approve && kubectl apply -f ../k8s/nop-deploy.yaml' 
+                sh 'cd deploy && terraform init && terraform apply -auto-approve && az aks get-credentials --resource-group rg-national-cod --name cluster-star-goat && kubectl apply -f ../k8s/nop-deploy.yaml' 
                 //sh 'echo "$(terraform output kube_config)" > ./azurek8s && export KUBECONFIG=./azurek8s && kubectl apply -f ../k8s/nop-deploy.yaml'
             }
         }
