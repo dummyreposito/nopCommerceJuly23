@@ -3,20 +3,18 @@ pipeline {
     stages {
         stage('vcs') {
             steps {
-                git branch: 'develop', 
+                git branch: 'devc', 
                     url: 'https://github.com/CICDProjects/nopCommerceJuly23.git'    
             }
             
         }
         stage('package') {
             steps {
-                sh 'dotnet restore src/NopCommerce.sln'
-                sh 'dotnet build -c Release src/NopCommerce.sln'
-                sh 'dotnet publish -c Release src/Presentation/Nop.Web/Nop.Web.csproj -o publish'
-                sh 'mkdir publish/bin publish/logs && zip -r nopCommerce.zip publish'
-                archive '**/nopCommerce.zip'
-            }
-            
+                sh 'docker image build -t nopcommerce:latest .'
+                sh 'docker image tag nopcommerce:latest shaikkhajaibrahim/nopcommerceaug23:latest'
+                sh 'docker image push shaikkhajaibrahim/nopcommerceaug23:latest'
+                
+            }            
         }
     }
 }
