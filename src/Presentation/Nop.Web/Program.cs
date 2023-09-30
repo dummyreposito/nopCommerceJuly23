@@ -1,4 +1,5 @@
 ﻿using Autofac.Extensions.DependencyInjection;
+using Elastic.Apm.NetCoreAll;
 using Nop.Core.Configuration;
 using Nop.Core.Infrastructure;
 using Nop.Web.Framework.Infrastructure.Extensions;
@@ -43,6 +44,7 @@ namespace Nop.Web
 
             //configure the application HTTP request pipeline
             app.ConfigureRequestPipeline();
+            app.UseAllElasticApm();
             await app.StartEngineAsync();
 
             await app.RunAsync();
