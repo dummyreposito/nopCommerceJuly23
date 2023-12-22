@@ -1,10 +1,10 @@
 pipeline {
-    agent any
+    agent {label 'DONET_7'}
     stages {
         stage('vcs') {
             steps {
                 git branch: 'develop', 
-                    url: 'https://github.com/CICDProjects/nopCommerceJuly23.git'    
+                    url: ' https://github.com/dummyreposito/nopCommerceJuly23.git'    
             }
             
         }
