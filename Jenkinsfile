@@ -1,27 +1,34 @@
 pipeline {
-    agent any
+    agent {label 'Node_Docker'}
     stages {
         stage('vcs') {
             steps {
-                git branch: 'devc', 
-                    url: 'https://github.com/CICDProjects/nopCommerceJuly23.git'    
+                git branch: 'dev-container', 
+                    url: 'https://github.com/dummyreposito/nopCommerceJuly23.git'    
             }
             
         }
         stage('package') {
             steps {
                 sh 'docker image build -t nopcommerce:latest .'
-                sh 'docker image tag nopcommerce:latest shaikkhajaibrahim/nopcommerceaug23:latest'
-                sh 'docker image push shaikkhajaibrahim/nopcommerceaug23:latest'
+                sh 'docker image tag nopcommerce:latest ajaykumarramesh/nopcommerce:latest'
+                sh 'docker image push ajaykumarramesh/nopcommerce:latest'
                 
             }            
         }
-        stage('deploy') {
+        stage('terraform') {
             steps {
-                sh 'cd deploy && terraform init && terraform apply -auto-approve && az aks get-credentials --resource-group rg-national-cod --name cluster-star-goat && kubectl apply -f ../k8s/nop-deploy.yaml' 
+                sh 'cd deploy_Infrastructure && terraform init && terraform apply -auto-approve' 
                 //sh 'echo "$(terraform output kube_config)" > ./azurek8s && export KUBECONFIG=./azurek8s && kubectl apply -f ../k8s/nop-deploy.yaml'
             }
         }
+        stage('k8s_deploy'){
+            steps{
+            sh 'az aks get-credentials --resource-group rg-mutual-hare --name cluster-logical-heron && kubectl apply -f ./k8s/nop-deploy.yaml' 
+            }
+
+        }
+
     }
 }
 
