@@ -1,5 +1,6 @@
 pipeline {
-    agent {label 'DONET_7'}
+   agent any
+  
     stages {
         stage('vcs') {
             steps {
